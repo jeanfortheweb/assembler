@@ -1,4 +1,4 @@
-import { Task, createTask } from './tasks';
-import { create as createBlueprint } from './blueprints';
+import { Task, task, sequential, parallel } from './tasks';
+import { create as blueprint } from './blueprints';
 
-export { Task, createTask, createBlueprint };
+export { Task, task, sequential, parallel, blueprint };

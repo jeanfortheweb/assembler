@@ -1,12 +1,12 @@
 import execa from 'execa';
-import { createTask } from '@bluprint/cli';
+import { task } from '@bluprint/cli';
+import { readJson } from 'fs-extra';
 
 export default function prettier(...files: string[]) {
-  return createTask(`Prettify`, async (environment, task) => {
-    if (
-      'prettier' in environment.package.devDependencies ||
-      'prettier' in environment.package.dependencies
-    ) {
+  return task('Prettify', async ({ env }, task) => {
+    const json = await readJson(env.destination('package.json'));
+
+    if ('prettier' in json.devDependencies || 'prettier' in json.dependencies) {
       await execa('yarn', ['prettier', '--write', ...files]);
     } else {
       task.skip('No local prettier found.');
