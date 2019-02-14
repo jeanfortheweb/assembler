@@ -15,7 +15,7 @@ install:
 
 jobs:
   include:
-    - stage: test
+    - stage: build
       if: tag IS blank
       script:
         - yarn workspaces run tsc
