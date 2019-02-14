@@ -4,4 +4,5 @@ lib/
 coverage/
 yarn-error.log
 npm-debug.log
+lerna_debug.log
 .cache/
