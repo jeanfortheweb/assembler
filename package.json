@@ -1,7 +1,9 @@
 {
   "private": true,
   "workspaces": [
-    "cli",
-    "tasks"
-  ]
+    "packages/*"
+  ],
+  "dependencies": {
+    "lerna": "^2.11.0"
+  }
 }

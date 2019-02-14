@@ -11,6 +11,10 @@
     "lib",
     "bin"
   ],
+  "scripts": {
+    "test": "jest --coverage",
+    "compile": "tsc --p tsconfig.publish.json"
+  },
   "dependencies": {
     "@types/temp": "^0.8.32",
     "fs-extra": "^7.0.1",

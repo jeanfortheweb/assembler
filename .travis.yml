@@ -15,7 +15,8 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
 
 install:
-  - yarn
+  - lerna bootstrap
+  - lerna run compile
 
 jobs:
   include:
@@ -30,9 +31,8 @@ jobs:
         - cd lcov-1.13 && sudo make install
         - cd ..
         - chmod +x ./merge_lcov.sh
-        - yarn
       script:
-        - yarn workspaces run jest --coverage
+        - lerna run test --parallel
         - ./merge_lcov.sh
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
@@ -42,5 +42,4 @@ jobs:
     - stage: publish
       if: tag IS blank AND branch = master AND type != pull_request
       script:
-        - yarn workspaces run tsc --p tsconfig.publish.jso
         - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
