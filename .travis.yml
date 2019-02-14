@@ -26,7 +26,7 @@ jobs:
     - stage: test
       if: tag IS blank
       script:
-        - yarn workspaces run jest
+        - yarn workspaces run jest --coverage
 
     - stage: coverage
       if: tag IS blank AND branch = master AND type != pull_request
@@ -40,7 +40,6 @@ jobs:
         - cd ..
         - chmod +x ./merge_lcov.sh
       script:
-        - lerna run coverage
         - ./merge_lcov.sh
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
