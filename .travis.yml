@@ -22,7 +22,7 @@ jobs:
     - stage: build
       if: tag IS blank
       script:
-        - yarn workspaces run tsc
+        - yarn workspaces run tsc --p tsconfig.publish.json
 
     - stage: test
       if: tag IS blank
