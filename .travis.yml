@@ -27,6 +27,7 @@ jobs:
     - stage: test
       if: tag IS blank
       script:
+        - yarn
         - yarn workspaces run jest --coverage
 
     - stage: coverage
