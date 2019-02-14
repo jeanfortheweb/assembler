@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import temp from 'temp';
 import { join } from 'path';
 import { writeJsonSync } from 'fs-extra';

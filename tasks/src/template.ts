@@ -1,7 +1,7 @@
 import { Data } from 'ejs';
 import * as voca from 'voca';
 import { pathExists } from 'fs-extra';
-import { createTask } from '@assembler/cli';
+import { createTask } from '@bluprint/cli';
 
 export default function template(
   source: string,

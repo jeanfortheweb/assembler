@@ -23,6 +23,13 @@ export interface Task {
   enabled?: boolean;
 }
 
+export function createTask(description: string, execute: TaskExecuter) {
+  return {
+    description,
+    execute,
+  };
+}
+
 export function normalizeTasks(tasks: Task[]): ListrTask[] {
   return tasks.map(
     input =>

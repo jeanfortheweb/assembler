@@ -1,5 +1,5 @@
 import execa from 'execa';
-import { createTask } from '@assembler/cli';
+import { createTask } from '@bluprint/cli';
 
 export default function prettier(...files: string[]) {
   return createTask(`Prettify`, async (environment, task) => {

@@ -1,5 +1,5 @@
 {
-  "name": "@assembler/cli",
+  "name": "@bluprint/cli",
   "version": "0.0.0",
   "license": "MIT",
   "main": "lib/index.js",
