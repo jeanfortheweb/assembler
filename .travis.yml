@@ -19,19 +19,8 @@ install:
 
 jobs:
   include:
-    - stage: build
-      if: tag IS blank
-      script:
-        - yarn workspaces run tsc --p tsconfig.publish.json
-
     - stage: test
       if: tag IS blank
-      script:
-        - yarn
-        - yarn workspaces run jest --coverage
-
-    - stage: coverage
-      if: tag IS blank AND branch = master AND type != pull_request
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
@@ -41,7 +30,9 @@ jobs:
         - cd lcov-1.13 && sudo make install
         - cd ..
         - chmod +x ./merge_lcov.sh
+        - yarn
       script:
+        - yarn workspaces run jest --coverage
         - ./merge_lcov.sh
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
@@ -51,4 +42,5 @@ jobs:
     - stage: publish
       if: tag IS blank AND branch = master AND type != pull_request
       script:
+        - yarn workspaces run tsc --p tsconfig.publish.jso
         - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
