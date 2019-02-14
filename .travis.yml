@@ -15,6 +15,7 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
 
 install:
+  - yarn
   - lerna bootstrap
   - lerna run compile
 
