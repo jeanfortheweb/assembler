@@ -4,8 +4,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "bin": {
-    "assembler": "bin/run",
-    "ass": "bin/run"
+    "bluprint": "bin/run",
+    "bp": "bin/run"
   },
   "files": [
     "lib",
