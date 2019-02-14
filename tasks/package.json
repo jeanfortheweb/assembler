@@ -7,9 +7,11 @@
     "@bluprint/cli": "0.0.0",
     "@types/ejs": "^2.6.1",
     "@types/execa": "^0.9.0",
+    "@types/jest": "^24.0.5",
     "@types/jest-diff": "^20.0.1",
     "@types/listr": "^0.13.0",
     "@types/voca": "^1.4.0",
+    "jest": "^24.1.0",
     "typescript": "^3.3.3"
   },
   "files": [
@@ -24,5 +26,22 @@
     "listr": "^0.14.3",
     "tslib": "^1.9.3",
     "voca": "^1.4.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "/__tests__/.*\\.test\\.ts?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
