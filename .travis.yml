@@ -13,14 +13,17 @@ cache:
 install:
   - yarn
 
-services: mongodb
-
 jobs:
   include:
     - stage: test
       if: tag IS blank
       script:
-        - lerna run test
+        - yarn workspaces run tsc
+
+    - stage: test
+      if: tag IS blank
+      script:
+        - yarn workspaces run jest
 
     - stage: coverage
       if: tag IS blank AND branch = master AND type != pull_request
