@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import temp from 'temp';
 import { join } from 'path';
 import { writeJsonSync } from 'fs-extra';
@@ -42,4 +40,16 @@ export async function executeYargs(
         },
       );
   });
+}
+
+export async function expectYargsOutput(
+  yargs: Argv,
+  input: string,
+  ...expectations: Array<string | RegExp>
+) {
+  const { output } = await executeYargs(yargs, input);
+
+  for (let expectiation of expectations) {
+    expect(output).toMatch(expectiation);
+  }
 }

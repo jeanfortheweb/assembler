@@ -5,9 +5,8 @@ module.exports = create({
   description: 'removes a directory',
   arguments: '<path>',
   configure: argv =>
-    argv.boolean('force').positional('name', {
-      string: true,
-      description: 'name of directory',
+    argv.option('force').positional('path', {
+      description: 'path to remove',
     }),
   create: ({ path }) => ({
     description: 'removing directory',

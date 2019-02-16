@@ -1,4 +1,10 @@
 #!/usr/bin/env node
 
-require('ts-node').register();
-require('../lib/cli.js');
+const { run, getProjectRoot } = require('../lib/cli.js');
+const [interpeter, file, ...args] = process.argv;
+
+getProjectRoot().then(root =>
+  run(root, args)
+    .catch(output => output && console.log(output))
+    .then(output => output && console.log(output)),
+);

@@ -7,8 +7,7 @@ import {
   createYargs,
   run,
 } from '../cli';
-import { createPackage, executeYargs } from './helpers';
-import { scanAll } from '../blueprints';
+import { createPackage, executeYargs, expectYargsOutput } from './helpers';
 
 describe('getProjectRoot', () => {
   test('should find the package root', async () => {
@@ -28,8 +27,8 @@ describe('getProjectRoot', () => {
 describe('findBlueprintLocations', () => {
   test('should include custom and default location', async () => {
     const path = await createPackage({
-      assembler: {
-        blueprints: ['custom/location'],
+      bluprint: {
+        locations: ['./custom/location', '/root'],
       },
     });
 
@@ -47,7 +46,7 @@ describe('findBlueprintLocations', () => {
 
   test('should include default location only', async () => {
     const path = await createPackage({
-      assembler: {},
+      bluprint: {},
     });
 
     const defaultLocation = join(path, 'blueprints');
@@ -60,41 +59,45 @@ describe('findBlueprintLocations', () => {
 
 describe('createYargs', () => {
   test('creates argv as expected', async () => {
-    const blueprints = await scanAll([join(__dirname, 'blueprints')]);
-    const argv = await createYargs(blueprints);
+    const argv = await createYargs(join(__dirname, 'blueprints'));
 
     const { output } = await executeYargs(argv, '--help');
 
-    expect(output).toMatch(/directory:create <path>\s+creates a directory/);
-    expect(output).toMatch(/directory:remove <path>\s+removes a directory/);
-    expect(output).toMatch(/file <name>\s+creates a file/);
-    expect(output).not.toMatch(/--force/);
-    expect(output).not.toMatch(/name of directory/);
+    expect(output).toMatch(
+      /assemble <blueprint>  run a blueprint to assemble code/,
+    );
   });
 
-  test('creates subcommands as expected', async () => {
-    const blueprints = await scanAll([join(__dirname, 'blueprints')]);
-    const argv = await createYargs(blueprints);
-
-    const { output: createOutput } = await executeYargs(
-      argv,
-      'directory:create --help',
+  test('creates assemble commands as expected', async () => {
+    await expectYargsOutput(
+      await createYargs(__dirname),
+      'assemble --help',
+      /directory:create <path>\s+creates a directory/,
+      /directory:remove <path>\s+removes a directory/,
+      /file <name>\s+creates a file/,
     );
 
-    expect(createOutput).toMatch(/creates a directory\n/);
-    expect(createOutput).toMatch(/--force/);
-
-    const { output: removeOutput } = await executeYargs(
-      argv,
-      'directory:remove --help',
+    await expectYargsOutput(
+      await createYargs(__dirname),
+      'assemble directory:create --help',
+      /creates a directory/,
+      /--force/,
+      /path to create/,
     );
 
-    expect(removeOutput).toMatch(/removes a directory\n/);
-    expect(removeOutput).toMatch(/name of directory/);
+    await expectYargsOutput(
+      await createYargs(__dirname),
+      'assemble directory:remove --help',
+      /removes a directory/,
+      /--force/,
+      /path to remove/,
+    );
 
-    const { output: fileOutput } = await executeYargs(argv, 'file --help');
-
-    expect(fileOutput).toMatch(/creates a file\n/);
+    await expectYargsOutput(
+      await createYargs(__dirname),
+      'assemble file --help',
+      /creates a file/,
+    );
   });
 });
 
@@ -105,26 +108,22 @@ describe('run', () => {
     console.log = jest.fn;
   });
 
-  test('should fail without blueprint name', async () => {
-    await expect(run('/temp', '')).rejects.toThrow(
-      'Found no blueprint locations.',
-    );
-  });
-
-  test('should run blueprints', async () => {
+  test('should run blueprints as expected', async () => {
     const directory = join(temp.mkdirSync(), 'test');
     const file = join(directory, 'file.txt');
 
-    await run(root, ['directory:create', directory]);
+    await run(root, ['assemble', 'directory:create', directory]);
 
     expect(pathExistsSync(directory)).toBeTruthy();
 
-    await run(root, ['directory:remove', directory]);
+    await run(root, ['assemble', 'directory:remove', directory]);
 
     expect(pathExistsSync(directory)).toBeFalsy();
 
-    await run(root, ['file', file]);
+    await run(root, ['assemble', 'file', file]);
 
     expect(pathExistsSync(file)).toBeTruthy();
+
+    await run(root, ['assemble', 'failure']);
   });
 });
