@@ -11,6 +11,7 @@ describe('scan', () => {
     expect(Object.keys(await scan(location))).toEqual([
       'directory:create',
       'directory:remove',
+      'failure',
       'file',
     ]);
   });

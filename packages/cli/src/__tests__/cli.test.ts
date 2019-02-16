@@ -26,21 +26,24 @@ describe('getProjectRoot', () => {
 
 describe('findBlueprintLocations', () => {
   test('should include custom and default location', async () => {
+    const absoluteCustomLocation = temp.mkdirSync();
     const path = await createPackage({
       bluprint: {
-        locations: ['./custom/location', '/root'],
+        locations: ['./custom/location', absoluteCustomLocation],
       },
     });
 
     const customLocation = join(path, 'custom', 'location');
     const defaultLocation = join(path, 'blueprints');
 
+    await mkdirp(absoluteCustomLocation);
     await mkdirp(customLocation);
     await mkdirp(defaultLocation);
 
     expect(await findBlueprintLocations(path)).toEqual([
       defaultLocation,
       customLocation,
+      absoluteCustomLocation,
     ]);
   });
 
