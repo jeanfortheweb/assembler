@@ -5,9 +5,16 @@ import { Blueprints, execute, LoadedBlueprint } from './blueprints';
 import { createEnvironment } from './environment';
 import { dirname } from 'path';
 
+/**
+ * Creates a command for each blueprint to run it.
+ *
+ * @param root Root of the current project.
+ * @param name Name of the blueprint.
+ * @param blueprint Blueprint to execute.
+ */
 export function generate(
-  name: string,
   root: string,
+  name: string,
   blueprint: LoadedBlueprint,
 ): CommandModule {
   return {
@@ -25,6 +32,13 @@ export function generate(
   };
 }
 
+/**
+ * Creates the main assemble command which contains each blueprint as
+ * subcommand.
+ *
+ * @param root Root of the current project.
+ * @param blueprints Blueprints to integrate.
+ */
 export function assemble(
   root: string,
   blueprints: Blueprints<LoadedBlueprint>,
@@ -34,7 +48,7 @@ export function assemble(
     describe: 'run a blueprint to assemble code',
     builder: argv => {
       for (let [name, blueprint] of Object.entries(blueprints)) {
-        argv = argv.command(generate(name, root, blueprint));
+        argv = argv.command(generate(root, name, blueprint));
       }
 
       return argv;
